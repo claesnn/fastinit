@@ -30,6 +30,10 @@
 - [x] Automatic timestamps on models
 - [x] Type-safe request/response validation with Pydantic
 - [x] FastAPI automatic response model casting
+- [x] **Flexible pagination strategies:**
+  - [x] Limit/Offset pagination (default)
+  - [x] Cursor-based pagination
+  - [x] No pagination option
 
 ## Database Features
 

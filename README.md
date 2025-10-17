@@ -12,6 +12,7 @@ A powerful, production-ready CLI tool built with **Typer** that bootstraps FastA
 ### 🗄️ **Database Integration**
 - **PostgreSQL**, **MySQL**, and **SQLite** support
 - Pre-configured SQLAlchemy setup
+- **Alembic migrations with automatic settings import from pydantic_settings**
 - Database health checks included
 
 ### 🔐 **JWT Authentication**
@@ -93,6 +94,11 @@ fastinit new route users --service UserService
 
 # Generate all at once (model + schema + service + route)
 fastinit new crud User --fields "name:str,email:str,age:int"
+
+# Generate with different pagination strategies
+fastinit new crud Product --pagination cursor        # Cursor-based pagination
+fastinit new route users --pagination none           # No pagination
+fastinit new service UserService --pagination cursor # Custom pagination for service
 ```
 
 ### Configuration Options
@@ -175,6 +181,7 @@ fastinit new crud Product --fields "name:str,price:float,description:text"
 - **[Quick Start](docs/QUICKSTART.md)** - Get started in 5 minutes
 - **[Usage Guide](docs/USAGE_GUIDE.md)** - Complete reference
 - **[Visual Guide](docs/VISUAL_GUIDE.md)** - Visual diagrams and examples
+- **[Alembic Integration](docs/ALEMBIC_INTEGRATION.md)** - Database migrations with auto-import settings
 - **[Features](docs/FEATURES.md)** - Complete feature list
 - **[Examples](examples/)** - Code examples
 

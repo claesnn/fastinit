@@ -218,6 +218,54 @@ def test_database_types(tmp_path):
             assert "mysql" in content.lower()
 
 
+def test_alembic_configuration_generated(tmp_path):
+    """Test that Alembic configuration files are generated correctly."""
+    project_name = "test-alembic"
+    result = runner.invoke(
+        app, ["init", project_name, "--output", str(tmp_path), "--db"]
+    )
+
+    assert result.exit_code == 0
+
+    project_dir = tmp_path / project_name
+
+    # Check Alembic files exist
+    assert (project_dir / "alembic.ini").is_file()
+    assert (project_dir / "alembic").is_dir()
+    assert (project_dir / "alembic" / "env.py").is_file()
+    assert (project_dir / "alembic" / "script.py.mako").is_file()
+    assert (project_dir / "alembic" / "README.md").is_file()
+    assert (project_dir / "alembic" / "versions").is_dir()
+
+    # Check that env.py imports settings correctly
+    env_file = project_dir / "alembic" / "env.py"
+    env_content = env_file.read_text()
+
+    assert "from app.core.config import settings" in env_content
+    assert "settings.DATABASE_URL" in env_content
+    assert "from app.db.base import Base" in env_content
+    assert "target_metadata = Base.metadata" in env_content
+
+    # Check alembic.ini has correct script location
+    alembic_ini = project_dir / "alembic.ini"
+    ini_content = alembic_ini.read_text()
+    assert "script_location = alembic" in ini_content
+
+
+def test_alembic_not_generated_without_db(tmp_path):
+    """Test that Alembic files are not generated when database is not enabled."""
+    project_name = "test-no-alembic"
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path)])
+
+    assert result.exit_code == 0
+
+    project_dir = tmp_path / project_name
+
+    # Check Alembic files don't exist
+    assert not (project_dir / "alembic.ini").exists()
+    assert not (project_dir / "alembic").exists()
+
+
 def test_docker_generation(tmp_path):
     """Test Docker file generation."""
     project_name = "test-docker"

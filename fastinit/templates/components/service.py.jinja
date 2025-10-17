@@ -10,9 +10,19 @@ class {{ service_name }}:
     """Service for {{ model_name }} business logic."""
     
     @staticmethod
-    def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[{{ model_name }}]:
+{% if pagination_type == 'limit-offset' %}    def get_all(db: Session, skip: int = 0, limit: int = 100) -> List[{{ model_name }}]:
         """Get all {{ model_name }} records."""
         return db.query({{ model_name }}).offset(skip).limit(limit).all()
+{% elif pagination_type == 'cursor' %}    def get_all(db: Session, cursor: Optional[int] = None, limit: int = 100) -> List[{{ model_name }}]:
+        """Get all {{ model_name }} records with cursor pagination."""
+        query = db.query({{ model_name }})
+        if cursor:
+            query = query.filter({{ model_name }}.id > cursor)
+        return query.order_by({{ model_name }}.id).limit(limit).all()
+{% else %}    def get_all(db: Session) -> List[{{ model_name }}]:
+        """Get all {{ model_name }} records."""
+        return db.query({{ model_name }}).all()
+{% endif %}
     
     @staticmethod
     def get_by_id(db: Session, id: int) -> Optional[{{ model_name }}]:

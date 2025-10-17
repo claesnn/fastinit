@@ -77,19 +77,34 @@ def service(
         "-m",
         help="Associated model name",
     ),
+    pagination: str = typer.Option(
+        "limit-offset",
+        "--pagination",
+        help="Pagination type: 'limit-offset', 'cursor', or 'none'",
+    ),
 ):
     """
     Generate a new service class.
 
     Example:
         FastInit new service UserService --model User
+        FastInit new service UserService --pagination cursor
     """
     if project_dir is None:
         project_dir = Path.cwd()
 
+    # Validate pagination option
+    valid_pagination = ["limit-offset", "cursor", "none"]
+    if pagination not in valid_pagination:
+        console.print(
+            f"[red]Error:[/red] Invalid pagination type '{pagination}'. "
+            f"Must be one of: {', '.join(valid_pagination)}"
+        )
+        raise typer.Exit(1)
+
     try:
         generator = ComponentGenerator(project_dir)
-        generator.generate_service(name, model)
+        generator.generate_service(name, model, pagination_type=pagination)
 
         console.print(
             Panel.fit(
@@ -121,19 +136,35 @@ def route(
         "-s",
         help="Associated service name",
     ),
+    pagination: str = typer.Option(
+        "limit-offset",
+        "--pagination",
+        help="Pagination type: 'limit-offset', 'cursor', or 'none'",
+    ),
 ):
     """
     Generate a new API route.
 
     Example:
         FastInit new route users --service UserService
+        FastInit new route users --pagination cursor
+        FastInit new route users --pagination none
     """
     if project_dir is None:
         project_dir = Path.cwd()
 
+    # Validate pagination option
+    valid_pagination = ["limit-offset", "cursor", "none"]
+    if pagination not in valid_pagination:
+        console.print(
+            f"[red]Error:[/red] Invalid pagination type '{pagination}'. "
+            f"Must be one of: {', '.join(valid_pagination)}"
+        )
+        raise typer.Exit(1)
+
     try:
         generator = ComponentGenerator(project_dir)
-        generator.generate_route(name, service)
+        generator.generate_route(name, service, pagination_type=pagination)
 
         console.print(
             Panel.fit(
@@ -213,15 +244,31 @@ def crud(
         "-f",
         help="Fields in format 'name:type,email:str,age:int'",
     ),
+    pagination: str = typer.Option(
+        "limit-offset",
+        "--pagination",
+        help="Pagination type: 'limit-offset', 'cursor', or 'none'",
+    ),
 ):
     """
     Generate a complete CRUD setup (model + service + route).
 
     Example:
         FastInit new crud Product --fields "name:str,price:float,description:str"
+        FastInit new crud Product --pagination cursor
+        FastInit new crud Product --pagination none
     """
     if project_dir is None:
         project_dir = Path.cwd()
+
+    # Validate pagination option
+    valid_pagination = ["limit-offset", "cursor", "none"]
+    if pagination not in valid_pagination:
+        console.print(
+            f"[red]Error:[/red] Invalid pagination type '{pagination}'. "
+            f"Must be one of: {', '.join(valid_pagination)}"
+        )
+        raise typer.Exit(1)
 
     try:
         generator = ComponentGenerator(project_dir)
@@ -269,12 +316,12 @@ def crud(
         # Generate service
         console.print("  [cyan]→[/cyan] Creating service...")
         service_name = f"{name}Service"
-        generator.generate_service(service_name, name)
+        generator.generate_service(service_name, name, pagination_type=pagination)
 
         # Generate route
         console.print("  [cyan]→[/cyan] Creating route...")
         route_name = f"{name.lower()}s"
-        generator.generate_route(route_name, service_name)
+        generator.generate_route(route_name, service_name, pagination_type=pagination)
 
         console.print()
         console.print(

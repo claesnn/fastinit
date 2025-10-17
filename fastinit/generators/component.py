@@ -68,7 +68,12 @@ class ComponentGenerator:
         content = self.renderer.render("components/schema.py.jinja", context)
         schema_file.write_text(content, encoding="utf-8")
 
-    def generate_service(self, name: str, model_name: Optional[str] = None):
+    def generate_service(
+        self,
+        name: str,
+        model_name: Optional[str] = None,
+        pagination_type: str = "limit-offset",
+    ):
         """Generate a service class."""
         # Remove 'Service' suffix if present for file naming
         service_base_name = name.replace("Service", "").lower()
@@ -84,12 +89,18 @@ class ComponentGenerator:
         context = {
             "service_name": name if name.endswith("Service") else f"{name}Service",
             "model_name": model_name or name.replace("Service", ""),
+            "pagination_type": pagination_type,
         }
 
         content = self.renderer.render("components/service.py.jinja", context)
         service_file.write_text(content, encoding="utf-8")
 
-    def generate_route(self, name: str, service_name: Optional[str] = None):
+    def generate_route(
+        self,
+        name: str,
+        service_name: Optional[str] = None,
+        pagination_type: str = "limit-offset",
+    ):
         """Generate an API route."""
         # Ensure plural form for route name
         route_name = name if name.endswith("s") else f"{name}s"
@@ -109,6 +120,7 @@ class ComponentGenerator:
             "route_name": route_name,
             "model_name": model_name,
             "service_name": service_name or f"{model_name}Service",
+            "pagination_type": pagination_type,
         }
 
         content = self.renderer.render("components/route.py.jinja", context)

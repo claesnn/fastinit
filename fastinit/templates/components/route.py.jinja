@@ -2,7 +2,7 @@
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List{% if pagination_type == 'cursor' %}, Optional{% endif %}
 
 from api.deps import get_db
 from services.{{ model_name | lower }}_service import {{ service_name }}
@@ -17,12 +17,19 @@ router = APIRouter()
 
 @router.get("/{{ route_name }}", response_model=List[{{ model_name }}Response])
 def get_{{ route_name }}(
-    skip: int = 0,
+{% if pagination_type == 'limit-offset' %}    skip: int = 0,
     limit: int = 100,
     db: Session = Depends(get_db)
-):
+{% elif pagination_type == 'cursor' %}    cursor: Optional[int] = None,
+    limit: int = 100,
+    db: Session = Depends(get_db)
+{% else %}    db: Session = Depends(get_db)
+{% endif %}):
     """Get all {{ route_name }}."""
-    return {{ service_name }}.get_all(db, skip=skip, limit=limit)
+{% if pagination_type == 'limit-offset' %}    return {{ service_name }}.get_all(db, skip=skip, limit=limit)
+{% elif pagination_type == 'cursor' %}    return {{ service_name }}.get_all(db, cursor=cursor, limit=limit)
+{% else %}    return {{ service_name }}.get_all(db)
+{% endif %}
 
 
 @router.get("/{{ route_name }}/{id}", response_model={{ model_name }}Response)

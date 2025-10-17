@@ -2,7 +2,9 @@
 
 This directory contains example usage of fastinit CLI.
 
-## Programmatic Usage
+## Example Files
+
+### Programmatic Usage (`programmatic_usage.py`)
 
 See `programmatic_usage.py` for an example of using fastinit programmatically in Python.
 
@@ -10,12 +12,24 @@ See `programmatic_usage.py` for an example of using fastinit programmatically in
 python examples/programmatic_usage.py
 ```
 
-## CLI Examples
+### CLI Examples (`cli_examples.py`)
 
 See `cli_examples.py` for examples of using the fastinit CLI.
 
 ```bash
 python examples/cli_examples.py
+```
+
+### Pagination Examples (`pagination_examples.py`)
+
+Examples of different pagination strategies and implementations for FastAPI endpoints.
+
+### Alembic Integration (`alembic_example.py`)
+
+Demonstrates how to use Alembic migrations with automatic database settings import from pydantic_settings.
+
+```bash
+python examples/alembic_example.py
 ```
 
 ## Quick Examples

@@ -271,6 +271,23 @@ This generates:
 - `app/services/product_service.py` - Business logic layer
 - `app/api/routes/products.py` - REST API endpoints
 
+**Pagination Options:**
+
+FastInit supports three pagination strategies:
+
+```bash
+# Default: Limit/Offset pagination (skip & limit parameters)
+fastinit new crud Product --fields "name:str,price:float" --pagination limit-offset
+
+# Cursor-based pagination (better for large datasets)
+fastinit new crud Post --fields "title:str,content:text" --pagination cursor
+
+# No pagination (returns all records)
+fastinit new crud Category --fields "name:str" --pagination none
+```
+
+For detailed information about pagination strategies, see [PAGINATION.md](PAGINATION.md).
+
 **Complete workflow:**
 1. Request hits endpoint with JSON data
 2. FastAPI validates against Pydantic schema (`ProductCreate`)

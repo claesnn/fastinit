@@ -106,9 +106,20 @@ docker-compose up
 {% if use_db %}
 ## Database Migrations
 
-This project uses Alembic for database migrations.
+This project uses Alembic for database migrations. Alembic is configured to automatically import database settings from your `Settings` class in `app/core/config.py`.
+
+### Initial Setup
+
+The database URL is automatically read from your `.env` file through the `DATABASE_URL` setting. Make sure your `.env` file is configured:
+
+```bash
+cp .env.example .env
+# Edit .env and update DATABASE_URL
+```
 
 ### Create a new migration
+
+After modifying your SQLAlchemy models in `app/models/`:
 
 ```bash
 alembic revision --autogenerate -m "Description of changes"
@@ -125,6 +136,14 @@ alembic upgrade head
 ```bash
 alembic downgrade -1
 ```
+
+### View migration history
+
+```bash
+alembic history
+```
+
+For more details, see `alembic/README.md`.
 {% endif %}
 
 ## Project Structure
@@ -154,7 +173,13 @@ alembic downgrade -1
 │   │   └── __init__.py
 │   └── services/            # Business logic
 │       └── __init__.py
-├── tests/
+{% if use_db %}├── alembic/                 # Database migrations
+│   ├── versions/            # Migration scripts
+│   ├── env.py               # Alembic environment (auto-imports settings)
+│   ├── script.py.mako       # Migration template
+│   └── README.md            # Migration documentation
+├── alembic.ini              # Alembic configuration
+{% endif %}├── tests/
 │   └── __init__.py
 ├── .env.example             # Environment variables template
 ├── .gitignore

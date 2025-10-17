@@ -28,6 +28,7 @@ class ProjectGenerator:
         if self.config.use_db:
             self._generate_db_files()
             self._generate_models_files()
+            self._generate_alembic_files()
 
         if self.config.use_jwt:
             self._generate_security_files()
@@ -63,6 +64,8 @@ class ProjectGenerator:
 
         if self.config.use_db:
             directories.append(project_path / "app" / "db")
+            directories.append(project_path / "alembic")
+            directories.append(project_path / "alembic" / "versions")
 
         for directory in directories:
             directory.mkdir(parents=True, exist_ok=True)
@@ -136,6 +139,31 @@ class ProjectGenerator:
         # Generate models __init__.py
         init_content = self.renderer.render("models/__init__.py.jinja", context)
         self._write_file("app/models/__init__.py", init_content)
+
+    def _generate_alembic_files(self):
+        """Generate Alembic migration configuration files."""
+        context = self._get_template_context()
+
+        # Generate alembic.ini
+        alembic_ini_content = self.renderer.render("alembic.ini.jinja", context)
+        self._write_file("alembic.ini", alembic_ini_content)
+
+        # Generate alembic/env.py
+        env_content = self.renderer.render("alembic/env.py.jinja", context)
+        self._write_file("alembic/env.py", env_content)
+
+        # Generate alembic/script.py.mako
+        script_mako_content = self.renderer.render(
+            "alembic/script.py.mako.jinja", context
+        )
+        self._write_file("alembic/script.py.mako", script_mako_content)
+
+        # Generate alembic/README.md
+        alembic_readme_content = self.renderer.render("alembic/README.jinja", context)
+        self._write_file("alembic/README.md", alembic_readme_content)
+
+        # Create .gitkeep in versions directory to ensure it's tracked
+        self._write_file("alembic/versions/.gitkeep", "")
 
     def _generate_security_files(self):
         """Generate security-related files for JWT."""
