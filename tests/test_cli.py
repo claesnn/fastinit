@@ -29,7 +29,7 @@ def test_init_basic(tmp_path):
     # Check if essential files were created
     assert (project_dir / "app" / "main.py").exists()
     assert (project_dir / "app" / "core" / "config.py").exists()
-    assert (project_dir / "requirements.txt").exists()
+    assert (project_dir / "pyproject.toml").exists()
     assert (project_dir / ".env.example").exists()
     assert (project_dir / "README.md").exists()
 
@@ -60,9 +60,7 @@ def test_init_with_db(tmp_path):
 def test_init_with_jwt(tmp_path):
     """Test project initialization with JWT."""
     project_name = "test-jwt-project"
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--jwt"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--jwt"])
 
     assert result.exit_code == 0
 
@@ -73,9 +71,7 @@ def test_init_with_jwt(tmp_path):
 def test_init_with_docker(tmp_path):
     """Test project initialization with Docker."""
     project_name = "test-docker-project"
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--docker"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--docker"])
 
     assert result.exit_code == 0
 

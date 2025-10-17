@@ -39,8 +39,7 @@ class TemplateRenderer:
     def _pascal_case(text: str) -> str:
         """Convert text to PascalCase."""
         return "".join(
-            word.capitalize()
-            for word in text.replace("_", " ").replace("-", " ").split()
+            word.capitalize() for word in text.replace("_", " ").replace("-", " ").split()
         )
 
     @staticmethod

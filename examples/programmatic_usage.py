@@ -30,9 +30,10 @@ def create_example_project():
     print(f"  1. cd {config.project_name}")
     print("  2. python -m venv venv")
     print("  3. venv\\Scripts\\activate  # Windows")
-    print("  4. pip install -r requirements.txt")
+    print("  4. uv sync  # or: pip install -e .")
     print("  5. Copy .env.example to .env and configure")
-    print("  6. uvicorn app.main:app --reload")
+    print("  6. cd app")
+    print("  7. fastapi dev main.py")
 
 
 if __name__ == "__main__":

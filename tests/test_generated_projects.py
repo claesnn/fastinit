@@ -10,9 +10,7 @@ runner = CliRunner()
 def test_generated_project_structure(tmp_path):
     """Test that generated project has correct structure."""
     project_name = "test-structure"
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--db", "--jwt"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--db", "--jwt"])
 
     assert result.exit_code == 0
 
@@ -34,16 +32,14 @@ def test_generated_project_structure(tmp_path):
     assert (project_dir / "app" / "core" / "security.py").is_file()
     assert (project_dir / "app" / "db" / "session.py").is_file()
     assert (project_dir / "app" / "api" / "routes" / "health.py").is_file()
-    assert (project_dir / "requirements.txt").is_file()
+    assert (project_dir / "pyproject.toml").is_file()
     assert (project_dir / ".env.example").is_file()
 
 
 def test_generated_project_imports(tmp_path):
     """Test that generated project has valid Python imports."""
     project_name = "test-imports"
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--db"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--db"])
 
     assert result.exit_code == 0
 
@@ -63,9 +59,7 @@ def test_component_generation(tmp_path):
     project_name = "test-components"
 
     # Create project
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--db"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--db"])
     assert result.exit_code == 0
 
     project_dir = tmp_path / project_name
@@ -140,9 +134,7 @@ def test_crud_generation(tmp_path):
     project_name = "test-crud"
 
     # Create project
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--db"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--db"])
     assert result.exit_code == 0
 
     project_dir = tmp_path / project_name
@@ -221,9 +213,7 @@ def test_database_types(tmp_path):
 def test_alembic_configuration_generated(tmp_path):
     """Test that Alembic configuration files are generated correctly."""
     project_name = "test-alembic"
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--db"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--db"])
 
     assert result.exit_code == 0
 
@@ -269,9 +259,7 @@ def test_alembic_not_generated_without_db(tmp_path):
 def test_docker_generation(tmp_path):
     """Test Docker file generation."""
     project_name = "test-docker"
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--docker"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--docker"])
 
     assert result.exit_code == 0
 
@@ -284,9 +272,7 @@ def test_docker_generation(tmp_path):
 def test_jwt_configuration(tmp_path):
     """Test JWT configuration in generated project."""
     project_name = "test-jwt-config"
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--jwt"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--jwt"])
 
     assert result.exit_code == 0
 
@@ -301,11 +287,11 @@ def test_jwt_configuration(tmp_path):
     assert "create_access_token" in content
     assert "verify_token" in content
 
-    # Check requirements include JWT libraries
-    req_file = project_dir / "requirements.txt"
-    req_content = req_file.read_text()
-    assert "PyJWT" in req_content
-    assert "PyJWKClient" in req_content
+    # Check pyproject.toml includes JWT libraries
+    pyproject_file = project_dir / "pyproject.toml"
+    pyproject_content = pyproject_file.read_text()
+    assert "PyJWT" in pyproject_content
+    assert "PyJWKClient" in pyproject_content
 
 
 def test_duplicate_file_prevention(tmp_path):
@@ -313,9 +299,7 @@ def test_duplicate_file_prevention(tmp_path):
     project_name = "test-duplicates"
 
     # Create project
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--db"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--db"])
     assert result.exit_code == 0
 
     project_dir = tmp_path / project_name
@@ -389,9 +373,7 @@ def test_schema_generation(tmp_path):
     project_name = "test-schema"
 
     # Create project
-    result = runner.invoke(
-        app, ["init", project_name, "--output", str(tmp_path), "--db"]
-    )
+    result = runner.invoke(app, ["init", project_name, "--output", str(tmp_path), "--db"])
     assert result.exit_code == 0
 
     project_dir = tmp_path / project_name

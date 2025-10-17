@@ -35,8 +35,16 @@ source venv/bin/activate
 
 ### 3. Install dependencies
 
+Using `uv` (recommended - [install uv](https://docs.astral.sh/uv/)):
+
 ```bash
-pip install -r requirements.txt
+uv sync
+```
+
+Or using `pip`:
+
+```bash
+pip install -e .
 ```
 
 ### 4. Configure environment
@@ -57,16 +65,18 @@ Update the `DATABASE_URL` in `.env` with your database credentials.
 
 ### 5. Run the application
 
-```bash
-cd app
-uvicorn main:app --reload
-```
-
-Or using the newer `fastapi dev` command:
+Using `fastapi dev` (recommended):
 
 ```bash
 cd app
 fastapi dev main.py
+```
+
+Or using `uvicorn` directly:
+
+```bash
+cd app
+uvicorn main:app --reload
 ```
 
 The API will be available at `http://localhost:8000`
@@ -183,7 +193,7 @@ For more details, see `alembic/README.md`.
 │   └── __init__.py
 ├── .env.example             # Environment variables template
 ├── .gitignore
-├── requirements.txt
+├── pyproject.toml           # Project dependencies and metadata
 {% if use_docker %}├── Dockerfile
 ├── docker-compose.yml
 {% endif %}└── README.md

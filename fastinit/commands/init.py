@@ -23,20 +23,14 @@ def main(
         "-o",
         help="Output directory (defaults to current directory)",
     ),
-    db: bool = typer.Option(
-        False, "--db", help="Include database support (SQLAlchemy)"
-    ),
+    db: bool = typer.Option(False, "--db", help="Include database support (SQLAlchemy)"),
     db_type: str = typer.Option(
         "postgresql",
         "--db-type",
         help="Database type (postgresql, mysql, sqlite)",
     ),
-    jwt: bool = typer.Option(
-        False, "--jwt", help="Include JWT authentication with PyJWT"
-    ),
-    logging: bool = typer.Option(
-        False, "--logging", help="Include logging configuration"
-    ),
+    jwt: bool = typer.Option(False, "--jwt", help="Include JWT authentication with PyJWT"),
+    logging: bool = typer.Option(False, "--logging", help="Include logging configuration"),
     docker: bool = typer.Option(False, "--docker", help="Include Docker configuration"),
     interactive: bool = typer.Option(
         False,
@@ -157,18 +151,16 @@ def main(
         # Next steps
         console.print("\n[bold]Next steps:[/bold]")
         console.print(f"  1. cd {project_name}")
-        console.print("  2. python -m venv venv")
-        console.print(
-            "  3. venv\\Scripts\\activate (Windows) or source venv/bin/activate (Unix)"
-        )
-        console.print("  4. pip install -r requirements.txt")
+        console.print("  2. python -m venv .venv")
+        console.print("  3. .venv\\Scripts\\activate (Windows) or source .venv/bin/activate (Unix)")
+        console.print("  4. uv sync (or: pip install -e .)")
         if db:
             console.print("  5. Copy .env.example to .env and configure your database")
             console.print("  6. cd app")
-            console.print("  7. uvicorn main:app --reload (or: fastapi dev main.py)")
+            console.print("  7. fastapi dev main.py")
         else:
             console.print("  5. cd app")
-            console.print("  6. uvicorn main:app --reload (or: fastapi dev main.py)")
+            console.print("  6. fastapi dev main.py")
         console.print()
 
     except Exception as e:

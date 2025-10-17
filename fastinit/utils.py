@@ -12,9 +12,7 @@ def to_snake_case(text: str) -> str:
 
 def to_pascal_case(text: str) -> str:
     """Convert text to PascalCase."""
-    return "".join(
-        word.capitalize() for word in text.replace("_", " ").replace("-", " ").split()
-    )
+    return "".join(word.capitalize() for word in text.replace("_", " ").replace("-", " ").split())
 
 
 def to_camel_case(text: str) -> str:

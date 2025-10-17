@@ -38,13 +38,20 @@ clean:
 	rm -rf build/
 	rm -rf dist/
 	rm -rf *.egg-info
-	find . -type d -name __pycache__ -exec rm -rf {} +
-	find . -type f -name "*.pyc" -delete
+	find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	find . -type f -name "*.pyc" -delete 2>/dev/null || true
 
-build: clean
+clean-win:
+	@if exist build rmdir /s /q build
+	@if exist dist rmdir /s /q dist
+	@if exist fastinit.egg-info rmdir /s /q fastinit.egg-info
+	@for /d /r . %%d in (__pycache__) do @if exist "%%d" rmdir /s /q "%%d"
+	@del /s /q *.pyc 2>nul || exit 0
+
+build:
 	python -m build
 
-publish: build
+publish:
 	python -m twine upload dist/*
 
 example-basic:

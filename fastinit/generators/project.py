@@ -36,7 +36,7 @@ class ProjectGenerator:
         if self.config.use_docker:
             self._generate_docker_files()
 
-        self._generate_requirements()
+        self._generate_pyproject()
         self._generate_env_file()
         self._generate_gitignore()
         self._generate_readme()
@@ -71,8 +71,8 @@ class ProjectGenerator:
             directory.mkdir(parents=True, exist_ok=True)
 
             # Create __init__.py files
+            # Note: "app" is excluded as it's the root package directory
             if directory.name in [
-                "app",
                 "api",
                 "routes",
                 "core",
@@ -153,9 +153,7 @@ class ProjectGenerator:
         self._write_file("alembic/env.py", env_content)
 
         # Generate alembic/script.py.mako
-        script_mako_content = self.renderer.render(
-            "alembic/script.py.mako.jinja", context
-        )
+        script_mako_content = self.renderer.render("alembic/script.py.mako.jinja", context)
         self._write_file("alembic/script.py.mako", script_mako_content)
 
         # Generate alembic/README.md
@@ -189,12 +187,12 @@ class ProjectGenerator:
         dockerignore_content = self.renderer.render("dockerignore.jinja", context)
         self._write_file(".dockerignore", dockerignore_content)
 
-    def _generate_requirements(self):
-        """Generate requirements.txt file."""
+    def _generate_pyproject(self):
+        """Generate pyproject.toml file."""
         context = self._get_template_context()
 
-        requirements_content = self.renderer.render("requirements.txt.jinja", context)
-        self._write_file("requirements.txt", requirements_content)
+        pyproject_content = self.renderer.render("pyproject.toml.jinja", context)
+        self._write_file("pyproject.toml", pyproject_content)
 
     def _generate_env_file(self):
         """Generate .env.example file."""

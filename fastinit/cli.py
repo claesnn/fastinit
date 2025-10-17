@@ -18,9 +18,7 @@ console = Console()
 app.command(name="init", help="Initialize a new FastAPI project")(init.main)
 
 # Add new subcommands
-app.add_typer(
-    new.app, name="new", help="Generate new components (models, services, routes)"
-)
+app.add_typer(new.app, name="new", help="Generate new components (models, services, routes)")
 
 
 @app.command()

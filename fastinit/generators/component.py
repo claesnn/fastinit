@@ -16,9 +16,7 @@ class ComponentGenerator:
 
         # Verify we're in a FastAPI project
         if not (self.app_dir / "main.py").exists():
-            raise ValueError(
-                "Not a valid FastAPI project directory (app/main.py not found)"
-            )
+            raise ValueError("Not a valid FastAPI project directory (app/main.py not found)")
 
     def generate_model(self, name: str, fields: Optional[Dict[str, str]] = None):
         """Generate a SQLAlchemy model."""
